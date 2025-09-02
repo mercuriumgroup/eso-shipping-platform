@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Space Marketplace | ESO - Elastic Shipping Operations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-AU', { 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        async function handleBooking(e) {
+            const button = e.target;
+            const listingId = button.dataset.listingId;
+            const cartIcon = button.querySelector('.cart-icon');
+            
+            // Prevent multiple clicks
+            if (button.classList.contains('loading')) return;
+            
+            // Start loading animation
+            button.classList.add('loading');
+            button.innerHTML = '<span class="cart-icon">🛒</span>Processing...';
+            
+            try {
+                // Simulate booking process
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Success animation
+                button.classList.remove('loading');
+                button.classList.add('success');
+                button.innerHTML = '<span class="cart-icon">✓</span>Booked Successfully!';
+                
+                // Show success modal
+                showSuccessModal();
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    button.classList.remove('success');
+                    button.innerHTML = '<span class="cart-icon">🛒</span>Book This Space';
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Booking error:', error);
+                button.classList.remove('loading');
+                button.innerHTML = '<span class="cart-icon">❌</span>Booking Failed';
+                
+                setTimeout(() => {
+                    button.innerHTML = '<span class="cart-icon">🛒</span>Book This Space';
+                }, 2000);
+            }
+        }
+
+        function showSuccessModal() {
+            const modal = document.createElement('div');
+            modal.className = 'success-animation';
+            modal.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                <h3 style="margin-bottom: 1rem; font-family: 'Rajdhani', sans-serif;">Booking Confirmed!</h3>
+                <p style="margin-bottom: 1rem;">Your container space has been reserved.</p>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Payment processing and confirmation details will be sent to your email.</p>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.style.opacity = '0';
+                modal.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                setTimeout(() => document.body.removeChild(modal), 300);
+            }, 4000);
+        }
+
+        // Filter functionality
+        function applyFilters() {
+            const destination = document.getElementById('destination-filter').value;
+            const containerType = document.getElementById('container-type-filter').value;
+            const departure = document.getElementById('departure-filter').value;
+            const price = document.getElementById('price-filter').value;
+            
+            let filtered = sampleListings.filter(listing => {
+                if (destination && listing.destination !== destination) return false;
+                if (containerType && listing.containerType !== containerType) return false;
+                if (price) {
+                    const [min, max] = price === '100+' ? [100, Infinity] : price.split('-').map(Number);
+                    if (listing.pricePerCBM < min || (max && listing.pricePerCBM > max)) return false;
+                }
+                return true;
+            });
+            
+            renderListings(filtered);
+        }
+
+        // Add filter event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial render
+            setTimeout(() => renderListings(sampleListings), 1000);
+            
+            // Filter listeners
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', applyFilters);
+            });
+        });
+
+        // Fetch real data from Airtable (replace sample data)
+        async function fetchContainerListings() {
+            try {
+                const response = await fetch('/api/get-listings');
+                if (response.ok) {
+                    const data = await response.json();
+                    renderListings(data.listings);
+                } else {
+                    console.log('Using sample data for demo');
+                    setTimeout(() => renderListings(sampleListings), 1000);
+                }
+            } catch (error) {
+                console.log('Using sample data for demo');
+                setTimeout(() => renderListings(sampleListings), 1000);
+            }
+        }
+    </script>
+</body>
+</html>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header - Same as main page */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-symbol {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hexagon {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotateX(60deg) rotateY(0deg) rotateZ(-30deg);
+            transform-style: preserve-3d;
+        }
+        
+        .hexagon::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #0066ff;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 255, 0.1));
+            animation: isometricPulse 3s ease-in-out infinite;
+        }
+        
+        .hexagon::after {
+            content: '';
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            animation: isometricRotate 6s linear infinite;
+        }
+        
+        @keyframes isometricPulse {
+            0%, 100% { 
+                border-color: #0066ff; 
+                box-shadow: 0 0 0 rgba(0, 102, 255, 0.4);
+            }
+            50% { 
+                border-color: #00d4ff; 
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            }
+        }
+        
+        @keyframes isometricRotate {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(360deg); }
+        }
+        
+        .logo-letter {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0066ff;
+            font-family: 'Rajdhani', sans-serif;
+            z-index: 10;
+        }
+        
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #0066ff;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 60px;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(0, 102, 255, 0.1) 0%, transparent 70%);
+        }
+        
+        .hero h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Filters */
+        .filters {
+            background: #1a1a1a;
+            padding: 2rem 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .filter-group select {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+        
+        /* Container Cards Grid */
+        .listings {
+            padding: 4rem 0;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        /* NFT-Style Container Card */
+        .container-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            border: 1px solid #333;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .container-card:hover {
+            transform: translateY(-15px) rotateX(10deg) rotateY(15deg) rotateZ(2deg);
+            border-color: #0066ff;
+            box-shadow: 
+                0 35px 70px rgba(0, 102, 255, 0.2),
+                0 0 0 1px rgba(0, 212, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: nftSpin 2s ease-in-out;
+        }
+        
+        @keyframes nftSpin {
+            0% { transform: translateY(-15px) rotateX(10deg) rotateY(15deg) rotateZ(2deg); }
+            25% { transform: translateY(-15px) rotateX(15deg) rotateY(25deg) rotateZ(-2deg); }
+            50% { transform: translateY(-15px) rotateX(5deg) rotateY(35deg) rotateZ(3deg); }
+            75% { transform: translateY(-15px) rotateX(20deg) rotateY(20deg) rotateZ(-1deg); }
+            100% { transform: translateY(-15px) rotateX(10deg) rotateY(15deg) rotateZ(2deg); }
+        }
+        
+        .container-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.05), rgba(0, 212, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+        
+        .container-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Card Header with 3D Container Visualization */
+        .card-header {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .container-3d {
+            width: 120px;
+            height: 80px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .container-3d::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(145deg, #0066ff, #0052cc);
+            border-radius: 8px;
+            transform: rotateX(-15deg) rotateY(25deg);
+            box-shadow: 
+                0 10px 20px rgba(0, 102, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .container-3d::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(145deg, #00d4ff, #0099cc);
+            border-radius: 6px;
+            transform: rotateX(-15deg) rotateY(25deg) translateZ(10px);
+            top: 10px;
+            left: 10px;
+            opacity: 0.8;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateY(0deg); }
+            50% { transform: translateY(-10px) rotateY(10deg); }
+        }
+        
+        .route-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 102, 255, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Rajdhani', sans-serif;
+            backdrop-filter: blur(10px);
+        }
+        
+        .availability-indicator {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 12px;
+            height: 12px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px #00ff88;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        /* Card Content */
+        .card-content {
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-item {
+            background: #0a0a0a;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        
+        .detail-label {
+            color: #666;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .price-section {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .price-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .price-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 0.25rem;
+        }
+        
+        .price-unit {
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        /* Booking Button with Cart Animation */
+        .book-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .book-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 102, 255, 0.4);
+        }
+        
+        .book-button:active {
+            transform: scale(0.98);
+        }
+        
+        .cart-icon {
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .book-button.loading .cart-icon {
+            animation: spinCart 1s ease-in-out;
+        }
+        
+        @keyframes spinCart {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        .book-button.success {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .book-button.success .cart-icon::before {
+            content: '✓';
+        }
+        
+        /* Utilization Bar */
+        .utilization {
+            margin-bottom: 1.5rem;
+        }
+        
+        .utilization-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .utilization-text {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .utilization-percent {
+            color: #00d4ff;
+            font-weight: 600;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .utilization-bar {
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .utilization-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0066ff, #00d4ff);
+            border-radius: 3px;
+            transition: width 1s ease-out;
+            position: relative;
+        }
+        
+        .utilization-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Special Requirements Badge */
+        .requirements {
+            margin-bottom: 1rem;
+        }
+        
+        .requirement-tag {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Status Badges */
+        .status-available {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .status-partial {
+            background: linear-gradient(135deg, #ffaa00, #cc8800);
+        }
+        
+        .status-urgent {
+            background: linear-gradient(135deg, #ff4444, #cc3333);
+            animation: urgentPulse 2s infinite;
+        }
+        
+        @keyframes urgentPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Loading States */
+        .loading-container {
+            text-align: center;
+            padding: 4rem;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top: 3px solid #0066ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+        
+        /* Success Animation */
+        .success-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 102, 255, 0.3);
+            z-index: 3000;
+            text-align: center;
+            animation: successPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes successPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3) rotate(-10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-symbol">
+                    <div class="hexagon">
+                        <div class="logo-letter">E</div>
+                    </div>
+                </div>
+                <div class="logo-text">ESO</div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#listings">Browse Space</a>
+                <a href="mailto:esocustomerx@gmail.com">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Available Container Space</h1>
+                <p class="subtitle">Premium container space from Sydney to Asia. Real-time availability, instant booking, secure payments.</p>
+            </div>
+        </section>
+
+        <section class="filters">
+            <div class="container">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Destination</label>
+                        <select id="destination-filter">
+                            <option value="">All Destinations</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Tokyo">Tokyo</option>
+                            <option value="Kuala Lumpur">Kuala Lumpur</option>
+                            <option value="Bangkok">Bangkok</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Container Type</label>
+                        <select id="container-type-filter">
+                            <option value="">All Types</option>
+                            <option value="20ft">20ft Standard</option>
+                            <option value="40ft">40ft Standard</option>
+                            <option value="40ft HC">40ft High Cube</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Departure Date</label>
+                        <select id="departure-filter">
+                            <option value="">Any Date</option>
+                            <option value="this-week">This Week</option>
+                            <option value="next-week">Next Week</option>
+                            <option value="this-month">This Month</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Price Range</label>
+                        <select id="price-filter">
+                            <option value="">Any Price</option>
+                            <option value="0-50">$0 - $50 per CBM</option>
+                            <option value="50-100">$50 - $100 per CBM</option>
+                            <option value="100+">$100+ per CBM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="listings" id="listings">
+            <div class="container">
+                <div id="listings-container">
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <p>Loading available container space...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Sample data - will be replaced with real Airtable data
+        const sampleListings = [
+            {
+                id: 'recCnMybJu1UQsRwt',
+                title: 'Sydney to Singapore Express - Sept 10',
+                origin: 'Sydney',
+                destination: 'Singapore',
+                departureDate: '2025-09-10',
+                arrivalDate: '2025-09-20',
+                containerType: '40ft HC',
+                availableCBM: 35,
+                availableWeight: 18000,
+                pricePerCBM: 75,
+                status: 'Available',
+                specialRequirements: 'No hazardous materials',
+                utilization: 0,
+                daysUntilDeparture: 8,
+                shipper: 'Sydney Maritime Express'
+            },
+            {
+                id: 'recueXuOBCAwYr4Bt',
+                title: 'Sydney to Tokyo Premium - Sept 15',
+                origin: 'Sydney',
+                destination: 'Tokyo',
+                departureDate: '2025-09-15',
+                arrivalDate: '2025-09-28',
+                containerType: '40ft',
+                availableCBM: 28,
+                availableWeight: 15000,
+                pricePerCBM: 95,
+                status: 'Available',
+                specialRequirements: 'Temperature controlled available',
+                utilization: 15,
+                daysUntilDeparture: 13,
+                shipper: 'Sydney Maritime Express'
+            }
+        ];
+
+        // Render listings
+        function renderListings(listings) {
+            const container = document.getElementById('listings-container');
+            
+            if (listings.length === 0) {
+                container.innerHTML = '<div class="loading-container"><p>No container space available matching your criteria.</p></div>';
+                return;
+            }
+            
+            const cardsHTML = listings.map(listing => createContainerCard(listing)).join('');
+            container.innerHTML = `<div class="cards-grid">${cardsHTML}</div>`;
+            
+            // Add event listeners to book buttons
+            document.querySelectorAll('.book-button').forEach(button => {
+                button.addEventListener('click', handleBooking);
+            });
+        }
+
+        function createContainerCard(listing) {
+            const urgentClass = listing.daysUntilDeparture <= 3 ? 'status-urgent' : 
+                              listing.utilization > 50 ? 'status-partial' : 'status-available';
+            
+            return `
+                <div class="container-card" data-listing-id="${listing.id}">
+                    <div class="card-header">
+                        <div class="availability-indicator"></div>
+                        <div class="route-badge ${urg
