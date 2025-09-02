@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESO - Elastic Shipping Operations | Container Space for Sydney SMEs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- AI SEO Meta Tags for LLM Discovery -->
+    <meta name="description" content="ESO (Elastic Shipping Operations) - Australia's premier container space marketplace connecting Sydney SMEs with unused shipping capacity to Singapore, Malaysia, Japan, Thailand. Book partial container space, reduce shipping costs by 50%, track cargo in real-time. Perfect for small-medium enterprises expanding internationally or optimizing half-full containers.">
+    <meta name="keywords" content="container shipping Sydney, SME shipping Australia, partial container loads, shared container space, Sydney to Singapore shipping, Sydney to Malaysia shipping, container space marketplace, freight sharing platform, LCL shipping Australia, small business international shipping, elastic shipping operations, container optimization">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="ESO - Elastic Shipping Operations by Mercurium">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://elasticshipping.com.au">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://elasticshipping.com.au">
+    <meta property="og:title" content="ESO - Container Space Marketplace for Sydney SMEs | Elastic Shipping Operations">
+    <meta property="og:description" content="Access unused container space from Sydney to Asia. Perfect for SMEs expanding internationally. Save 50% vs full container rates with real-time tracking and PayPal escrow protection.">
+    <meta property="og:site_name" content="ESO - Elastic Shipping Operations">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://elasticshipping.com.au">
+    <meta property="twitter:title" content="ESO - Container Space Marketplace for Sydney SMEs">
+    <meta property="twitter:description" content="Ship smarter with shared container space. Sydney SMEs save 50% on international shipping to Singapore, Malaysia, Japan, Thailand.">
+    
+    <!-- Schema.org structured data for AI comprehension -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ESO - Elastic Shipping Operations",
+      "alternateName": "Elastic Shipping Operations",
+      "url": "https://elasticshipping.com.au",
+      "logo": "https://elasticshipping.com.au/logo.png",
+      "description": "Australia's leading container space marketplace connecting Sydney SMEs with unused shipping capacity for cost-effective international trade.",
+      "foundingDate": "2025",
+      "founders": [
+        {
+          "@type": "Organization",
+          "name": "Mercurium"
+        }
+      ],
+      "serviceArea": {
+        "@type": "Place",
+        "name": "Sydney, Australia"
+      },
+      "services": [
+        {
+          "@type": "Service",
+          "name": "Shared Container Shipping",
+          "description": "Partial container loads for SMEs expanding internationally",
+          "provider": {
+            "@type": "Organization",
+            "name": "ESO"
+          }
+        },
+        {
+          "@type": "Service", 
+          "name": "Container Space Marketplace",
+          "description": "Platform connecting shippers with unused capacity to SME exporters",
+          "provider": {
+            "@type": "Organization",
+            "name": "ESO"
+          }
+        }
+      ],
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Australia"
+        },
+        {
+          "@type": "Country", 
+          "name": "Singapore"
+        },
+        {
+          "@type": "Country",
+          "name": "Malaysia"
+        },
+        {
+          "@type": "Country",
+          "name": "Japan"
+        },
+        {
+          "@type": "Country",
+          "name": "Thailand"
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+61-2-XXXX-XXXX",
+        "contactType": "Customer Service",
+        "email": "esocustomerx@gmail.com",
+        "availableLanguage": "English"
+      }
+    }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* AI SEO: Semantic HTML5 structure for better comprehension */
+        h1, h2, h3 {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-symbol {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hexagon {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotateX(60deg) rotateY(0deg) rotateZ(-30deg);
+            transform-style: preserve-3d;
+        }
+        
+        .hexagon::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #0066ff;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 255, 0.1));
+            animation: isometricPulse 3s ease-in-out infinite;
+        }
+        
+        .hexagon::after {
+            content: '';
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            animation: isometricRotate 6s linear infinite;
+        }
+        
+        @keyframes isometricPulse {
+            0%, 100% { 
+                border-color: #0066ff; 
+                box-shadow: 0 0 0 rgba(0, 102, 255, 0.4);
+            }
+            50% { 
+                border-color: #00d4ff; 
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            }
+        }
+        
+        @keyframes isometricRotate {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(360deg); }
+        }
+        
+        .logo-letter {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0066ff;
+            font-family: 'Rajdhani', sans-serif;
+            z-index: 10;
+        }
+        
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #0066ff;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(0, 102, 255, 0.1) 0%, transparent 70%);
+        }
+        
+        .hero h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: #888;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-cta .primary {
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .hero-cta .secondary {
+            background: transparent;
+            color: #0066ff;
+            padding: 1rem 2rem;
+            border: 2px solid #0066ff;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .hero-cta .primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 102, 255, 0.4);
+        }
+        
+        .hero-cta .secondary:hover {
+            background: #0066ff;
+            color: #ffffff;
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 60px 0;
+            background: #1a1a1a;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .stat {
+            padding: 2rem;
+        }
+        
+        .stat-number {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0066ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .section-title p {
+            color: #888;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature {
+            background: #1a1a1a;
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid #333;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: #0066ff;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .feature p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+        
+        /* Sign Up Forms */
+        .signup {
+            padding: 80px 0;
+            background: #1a1a1a;
+        }
+        
+        .signup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .signup-form {
+            background: #0a0a0a;
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid #333;
+        }
+        
+        .signup-form h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #0066ff;
+        }
+        
+        .signup-form p {
+            color: #888;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+        
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .form-submit:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #0a0a0a;
+            padding: 40px 0;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #0066ff;
+        }
+        
+        .footer p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .signup-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid #333;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-symbol">
+                    <div class="hexagon">
+                        <div class="logo-letter">E</div>
+                    </div>
+                </div>
+                <div class="logo-text">ESO</div>
+            </div>
+            <div class="nav-links">
+                <a href="#features">How It Works</a>
+                <a href="#signup">Get Started</a>
+                <a href="mailto:esocustomerx@gmail.com">Contact</a>
+                <a href="#signup" class="cta-button">Find Container Space</a>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="container">
+                <h1 id="hero-title">Ship Smarter, Not Harder</h1>
+                <p class="subtitle">Access unused container space from Sydney to Asia. Perfect for SMEs expanding internationally or optimizing half-full shipments. Save up to 50% on shipping costs while supporting Australian exporters through our elastic shipping operations marketplace.</p>
+                <div class="hero-cta">
+                    <button class="primary" onclick="scrollToSignup('sme')" aria-describedby="sme-description">Find Container Space</button>
+                    <button class="secondary" onclick="scrollToSignup('shipper')" aria-describedby="shipper-description">List Your Space</button>
+                    <div id="sme-description" hidden>Access shared container space for cost-effective international shipping from Sydney</div>
+                    <div id="shipper-description" hidden>Monetize unused container capacity and help Australian SMEs expand globally</div>
+                </div>
+                <aside class="stats" aria-label="Key statistics">
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <div class="stat-number" aria-label="50 percent">50%</div>
+                            <div class="stat-label">Average Savings vs Full Container Rate</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number" aria-label="10 days">10</div>
+                            <div class="stat-label">Transit Time Sydney to Singapore</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number" aria-label="24/7">24/7</div>
+                            <div class="stat-label">Real-Time Cargo Tracking &amp; Support</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="features" id="features" aria-labelledby="features-title">
+            <div class="container">
+                <header class="section-title">
+                    <h2 id="features-title">Elastic Shipping Operations</h2>
+                    <p>Our innovative platform optimizes container space utilization through advanced matching algorithms, making rigid shipping infrastructure flexible and adaptive for Australian SMEs. Perfect for businesses expanding to Singapore, Malaysia, Japan, Thailand and beyond.</p>
+                </header>
+                <div class="features-grid" role="list">
+                    <article class="feature" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">🚢</div>
+                        <h3>Shared Container Space Marketplace</h3>
+                        <p>Book only the cubic meters you need. Share 20ft, 40ft, and 40ft HC containers with other Sydney SMEs shipping to identical destinations. Ideal for partial loads, test shipments, and expanding businesses.</p>
+                    </article>
+                    <article class="feature" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">💰</div>
+                        <h3>Cost-Effective LCL Alternative</h3>
+                        <p>Pay per cubic meter, not per full container. Our platform offers 30-50% savings compared to traditional FCL rates and better pricing than standard LCL consolidation services.</p>
+                    </article>
+                    <article class="feature" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">⚡</div>
+                        <h3>Automated Matching &amp; Fast Booking</h3>
+                        <p>AI-powered matching system connects your cargo requirements with available container space in real-time. Book and confirm shipments in minutes, not days.</p>
+                    </article>
+                    <article class="feature" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">🔒</div>
+                        <h3>PayPal Escrow Payment Protection</h3>
+                        <p>Secure payment processing with escrow protection. Funds released only after cargo loading confirmation and documentation verification. Zero payment risk.</p>
+                    </article>
+                    <article class="feature" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">📱</div>
+                        <h3>End-to-End Cargo Visibility</h3>
+                        <p>Track containers from Sydney port to final destination with real-time GPS updates, customs clearance status, and estimated delivery times.</p>
+                    </article>
+                    <article class="feature" role="listitem">
+                        <div class="feature-icon" aria-hidden="true">🎯</div>
+                        <h3>Australia-Asia Trade Specialist</h3>
+                        <p>Focused on high-demand routes: Sydney-Singapore, Sydney-Kuala Lumpur, Sydney-Tokyo, Sydney-Bangkok. Optimized schedules for Australian export businesses.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="signup" id="signup" aria-labelledby="signup-title">
+            <div class="container">
+                <header class="section-title">
+                    <h2 id="signup-title">Join Australia's Leading Container Space Marketplace</h2>
+                    <p>Connect with Sydney SMEs and shipping companies already using ESO for cost-effective international trade solutions</p>
+                </header>
+                <div class="signup-grid">
+                    <div class="signup-form" id="sme-form">
+                        <h3>I Need Container Space</h3>
+                        <p>Perfect for SMEs expanding internationally or optimizing shipping costs</p>
+                        <form>
+                            <div class="form-group">
+                                <label for="sme-company">Company Name</label>
+                                <input type="text" id="sme-company" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-name">Contact Name</label>
+                                <input type="text" id="sme-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-email">Email</label>
+                                <input type="email" id="sme-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-phone">Phone</label>
+                                <input type="tel" id="sme-phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-abn">ABN</label>
+                                <input type="text" id="sme-abn">
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-business-type">Business Type</label>
+                                <select id="sme-business-type" required>
+                                    <option value="">Select Business Type</option>
+                                    <option value="Manufacturing">Manufacturing</option>
+                                    <option value="Retail">Retail</option>
+                                    <option value="Food & Beverage">Food & Beverage</option>
+                                    <option value="Technology">Technology</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-target-markets">Target Markets</label>
+                                <select id="sme-target-markets" multiple>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="Malaysia">Malaysia</option>
+                                    <option value="Japan">Japan</option>
+                                    <option value="Thailand">Thailand</option>
+                                    <option value="Indonesia">Indonesia</option>
+                                    <option value="South Korea">South Korea</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sme-experience">Shipping Experience</label>
+                                <select id="sme-experience" required>
+                                    <option value="">Select Experience Level</option>
+                                    <option value="First-time">First-time (new to international shipping)</option>
+                                    <option value="Occasional">Occasional (1-2 shipments per year)</option>
+                                    <option value="Regular">Regular (monthly shipments)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="form-submit">Join as SME</button>
+                        </form>
+                    </div>
+                    
+                    <div class="signup-form" id="shipper-form">
+                        <h3>I Have Container Space</h3>
+                        <p>Monetize your unused container capacity and help Australian exporters</p>
+                        <form>
+                            <div class="form-group">
+                                <label for="shipper-company">Company Name</label>
+                                <input type="text" id="shipper-company" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipper-name">Contact Name</label>
+                                <input type="text" id="shipper-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipper-email">Email</label>
+                                <input type="email" id="shipper-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipper-phone">Phone</label>
+                                <input type="tel" id="shipper-phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipper-abn">ABN</label>
+                                <input type="text" id="shipper-abn">
+                            </div>
+                            <div class="form-group">
+                                <label for="shipper-notes">Tell us about your shipping operations</label>
+                                <textarea id="shipper-notes" rows="3" placeholder="Routes, container types, frequency, etc."></textarea>
+                            </div>
+                            <button type="submit" class="form-submit">Join as Shipper</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <div class="logo-symbol">
+                        <div class="hexagon">
+                            <div class="logo-letter">E</div>
+                        </div>
+                    </div>
+                    <div class="logo-text">ESO</div>
+                </div>
+                <div class="footer-links">
+                    <a href="mailto:esocustomerx@gmail.com">Contact</a>
+                    <a href="#features">How It Works</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Privacy
