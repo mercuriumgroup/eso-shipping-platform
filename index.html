@@ -825,3 +825,288 @@
                     <a href="#features">How It Works</a>
                     <a href="#">Terms</a>
                     <a href="#">Privacy
+                        </a>
+                </div>
+            </div>
+            <p>© 2025 ESO - Elastic Shipping Operations by Mercurium. Built for Australian exporters.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // SME Form Handler
+    const smeForm = document.querySelector('#sme-form form');
+    if (smeForm) {
+        smeForm.addEventListener('submit', handleSMESubmission);
+    }
+    
+    // Shipper Form Handler  
+    const shipperForm = document.querySelector('#shipper-form form');
+    if (shipperForm) {
+        shipperForm.addEventListener('submit', handleShipperSubmission);
+    }
+});
+
+async function handleSMESubmission(e) {
+    e.preventDefault();
+    
+    const submitButton = e.target.querySelector('.form-submit');
+    const originalText = submitButton.textContent;
+    
+    // Show loading state
+    submitButton.textContent = 'Joining ESO...';
+    submitButton.disabled = true;
+    
+    try {
+        // Collect form data
+        const formData = {
+            companyName: document.getElementById('sme-company').value.trim(),
+            contactName: document.getElementById('sme-name').value.trim(),
+            email: document.getElementById('sme-email').value.trim(),
+            phone: document.getElementById('sme-phone').value.trim(),
+            abn: document.getElementById('sme-abn').value.trim(),
+            businessType: document.getElementById('sme-business-type').value,
+            shippingExperience: document.getElementById('sme-experience').value,
+            targetMarkets: Array.from(document.getElementById('sme-target-markets').selectedOptions).map(option => option.value),
+            notes: `SME signup: ${document.getElementById('sme-business-type').value} business with ${document.getElementById('sme-experience').value} shipping experience. Target markets: ${Array.from(document.getElementById('sme-target-markets').selectedOptions).map(option => option.value).join(', ')}`
+        };
+        
+        // Submit to secure API endpoint
+        const response = await fetch('/api/submit-sme', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            showSuccessMessage(result.message);
+            e.target.reset();
+            
+            // Optional: Track successful submission
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submit', {
+                    event_category: 'SME Registration',
+                    event_label: formData.businessType
+                });
+            }
+        } else {
+            throw new Error(result.error || 'Submission failed');
+        }
+        
+    } catch (error) {
+        console.error('SME submission error:', error);
+        showErrorMessage(error.message || 'There was an error submitting your information. Please try again or contact esocustomerx@gmail.com');
+    } finally {
+        // Reset button state
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
+}
+
+async function handleShipperSubmission(e) {
+    e.preventDefault();
+    
+    const submitButton = e.target.querySelector('.form-submit');
+    const originalText = submitButton.textContent;
+    
+    // Show loading state
+    submitButton.textContent = 'Joining ESO...';
+    submitButton.disabled = true;
+    
+    try {
+        // Collect form data
+        const formData = {
+            companyName: document.getElementById('shipper-company').value.trim(),
+            contactName: document.getElementById('shipper-name').value.trim(),
+            email: document.getElementById('shipper-email').value.trim(),
+            phone: document.getElementById('shipper-phone').value.trim(),
+            abn: document.getElementById('shipper-abn').value.trim(),
+            notes: document.getElementById('shipper-notes').value.trim()
+        };
+        
+        // Submit to secure API endpoint
+        const response = await fetch('/api/submit-shipper', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            showSuccessMessage(result.message);
+            e.target.reset();
+            
+            // Optional: Track successful submission
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submit', {
+                    event_category: 'Shipper Registration',
+                    event_label: 'Container Space Provider'
+                });
+            }
+        } else {
+            throw new Error(result.error || 'Submission failed');
+        }
+        
+    } catch (error) {
+        console.error('Shipper submission error:', error);
+        showErrorMessage(error.message || 'There was an error submitting your information. Please try again or contact esocustomerx@gmail.com');
+    } finally {
+        // Reset button state
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
+}
+
+function showSuccessMessage(message) {
+    const successDiv = document.createElement('div');
+    successDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #0066ff, #00d4ff);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 102, 255, 0.3);
+        z-index: 3000;
+        max-width: 450px;
+        text-align: center;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        animation: slideIn 0.3s ease-out;
+    `;
+    successDiv.innerHTML = `
+        <div style="font-size: 2rem; margin-bottom: 1rem;">🎉</div>
+        <div style="font-size: 1.1rem; line-height: 1.4;">${message}</div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (document.body.contains(successDiv)) {
+            successDiv.style.animation = 'slideOut 0.3s ease-in forwards';
+            setTimeout(() => {
+                if (document.body.contains(successDiv)) {
+                    document.body.removeChild(successDiv);
+                }
+            }, 300);
+        }
+    }, 5000);
+    
+    // Click to close
+    successDiv.addEventListener('click', () => {
+        if (document.body.contains(successDiv)) {
+            document.body.removeChild(successDiv);
+        }
+    });
+}
+
+function showErrorMessage(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #ff4444;
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(255, 68, 68, 0.3);
+        z-index: 3000;
+        max-width: 450px;
+        text-align: center;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        animation: slideIn 0.3s ease-out;
+    `;
+    errorDiv.innerHTML = `
+        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+        <div style="font-size: 1rem; line-height: 1.4;">${message}</div>
+    `;
+    
+    document.body.appendChild(errorDiv);
+    
+    // Auto-remove after 6 seconds
+    setTimeout(() => {
+        if (document.body.contains(errorDiv)) {
+            errorDiv.style.animation = 'slideOut 0.3s ease-in forwards';
+            setTimeout(() => {
+                if (document.body.contains(errorDiv)) {
+                    document.body.removeChild(errorDiv);
+                }
+            }, 300);
+        }
+    }, 6000);
+    
+    // Click to close
+    errorDiv.addEventListener('click', () => {
+        if (document.body.contains(errorDiv)) {
+            document.body.removeChild(errorDiv);
+        }
+    });
+}
+
+// Smooth scroll function for CTA buttons
+function scrollToSignup(type) {
+    const target = type === 'sme' ? '#sme-form' : '#shipper-form';
+    const element = document.querySelector(target);
+    if (element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+        
+        // Optional: Add focus highlight
+        const form = element.querySelector('form');
+        if (form) {
+            setTimeout(() => {
+                form.style.transform = 'scale(1.02)';
+                form.style.transition = 'transform 0.3s ease';
+                setTimeout(() => {
+                    form.style.transform = 'scale(1)';
+                }, 300);
+            }, 500);
+        }
+    }
+}
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+    
+</body>
+</html>
